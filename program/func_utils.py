@@ -12,16 +12,16 @@ def format_number(curr_num, match_num):
   curr_num_string = f"{curr_num}"
   match_num_string = f"{match_num}"
 
-  if "." in match_num_string:
-    match_decimals = len(match_num_string.split(".")[1])
-    curr_num_string = f"{curr_num:.{match_decimals}f}"
-    curr_num_string = curr_num_string[:]
+  if "." in match_num_string: # i.e. if it has decimal
+    match_decimals = len(match_num_string.split(".")[1]) # take the decimal part
+    curr_num_string = f"{curr_num:.{match_decimals}f}" 
+    curr_num_string = curr_num_string[:] # maybe unnecessary
     return curr_num_string
   else:
-    return f"{int(curr_num)}"
+    return f"{int(curr_num)}" # if no decimal, just return an intenger
 
 
-# Format time
+# Format time - change from Python DateTime format to ISO format where DYDX API requires
 def format_time(timestamp):
   return timestamp.replace(microsecond=0).isoformat()
 

@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from func_utils import format_number
+from func_utils import format_number # this function take the tick size and ensure the price match it in decimal place
 import time
 import json
 
@@ -42,7 +42,9 @@ def place_market_order(client, market, side, size, price, reduce_only):
 
   # Get expiration time
   server_time = client.public.get_time()
-  expiration = datetime.fromisoformat(server_time.data["iso"].replace("Z", "")) + timedelta(seconds=70)
+  # expiration = datetime.fromisoformat(server_time.data["iso"].replace("Z", "")) + timedelta(seconds=70)
+  expiration = datetime.fromisoformat(server_time.data["iso"].replace("Z", "")) + timedelta(seconds=70000) # to fix 'Order expiration cannot be less than 1 minute(s) in the future problem.  Probably due to timezone
+
 
   # Place an order
   placed_order = client.private.create_order(
@@ -74,7 +76,7 @@ def abort_all_positions(client):
   # Protect API
   time.sleep(0.5)
 
-  # Get markets for reference of tick size
+  # Get markets for reference of tick size - need it to get decimal correct when placing order
   markets = client.public.get_markets().data
 
   # Protect API
@@ -101,7 +103,7 @@ def abort_all_positions(client):
 
       # Get Price
       price = float(position["entryPrice"])
-      accept_price = price * 1.7 if side == "BUY" else price * 0.3
+      accept_price = price * 1.7 if side == "BUY" else price * 0.3 # acceptable worst price when placing order
       tick_size = markets["markets"][market]["tickSize"]
       accept_price = format_number(accept_price, tick_size)
 
@@ -110,7 +112,7 @@ def abort_all_positions(client):
         client,
         market,
         side,
-        position["sumOpen"],
+        position["sumOpen"], # the amount of the open order
         accept_price,
         True
       )

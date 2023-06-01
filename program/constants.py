@@ -1,8 +1,8 @@
 from dydx3.constants import API_HOST_GOERLI, API_HOST_MAINNET
-from decouple import config
+from decouple import config #get enviornment variable from my machine, so not exposing it on GitHub
 
 # !!!! SELECT MODE !!!!
-MODE = "DEVELOPMENT"
+MODE = "DEVELOPMENT" #PRODUCTION
 
 # Close all open positions and orders
 ABORT_ALL_POSITIONS = True
@@ -17,14 +17,14 @@ MANAGE_EXITS = True
 PLACE_TRADES = True
 
 # Resolution
-RESOLUTION = "1HOUR"
+RESOLUTION = "1HOUR" #doing 1 hour trading time frame
 
 # Stats Window
-WINDOW = 21
+WINDOW = 21 #calculate rolling average for z-score
 
 # Thresholds - Opening
 MAX_HALF_LIFE = 24
-ZSCORE_THRESH = 1.5
+ZSCORE_THRESH = 1.5 #e.g. Long if zscore reach -1.5, and close if it goes back to 0, or 1.5 etc
 USD_PER_TRADE = 100
 USD_MIN_COLLATERAL = 1880
 
@@ -32,14 +32,19 @@ USD_MIN_COLLATERAL = 1880
 CLOSE_AT_ZSCORE_CROSS = True
 
 # Ethereum Address
-ETHEREUM_ADDRESS = "0xe02809A6fEd4F98D6Ed8974C02818c9e3b7e7448"
+ETHEREUM_ADDRESS = "0xa9219aB593Dbad072dBe6441959A59eF316b3DaE" # not private key.  copy from MetaMask
 
 # KEYS - PRODUCTION
 # Must be on Mainnet in DYDX
-STARK_PRIVATE_KEY_MAINNET = config("STARK_PRIVATE_KEY_MAINNET")
-DYDX_API_KEY_MAINNET = config("DYDX_API_KEY_MAINNET")
-DYDX_API_SECRET_MAINNET = config("DYDX_API_SECRET_MAINNET")
-DYDX_API_PASSPHRASE_MAINNET = config("DYDX_API_PASSPHRASE_MAINNET")
+# STARK_PRIVATE_KEY_MAINNET = config("STARK_PRIVATE_KEY_MAINNET")  # config can get value from your environment variables
+# DYDX_API_KEY_MAINNET = config("DYDX_API_KEY_MAINNET")
+# DYDX_API_SECRET_MAINNET = config("DYDX_API_SECRET_MAINNET")
+# DYDX_API_PASSPHRASE_MAINNET = config("DYDX_API_PASSPHRASE_MAINNET")
+
+STARK_PRIVATE_KEY_MAINNET = ""  # config can get value from your environment variables
+DYDX_API_KEY_MAINNET = ""
+DYDX_API_SECRET_MAINNET = ""
+DYDX_API_PASSPHRASE_MAINNET = ""
 
 # KEYS - DEVELOPMENT
 # Must be on Testnet in DYDX
