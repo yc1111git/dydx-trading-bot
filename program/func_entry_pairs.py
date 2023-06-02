@@ -19,7 +19,7 @@ def open_positions(client):
   """
 
   # Load cointegrated pairs
-  df = pd.read_csv("cointegrated_pairs.csv")
+  df = pd.read_csv("cointegrated_pairs1.csv")
 
   # Get markets from referencing of min order size, tick size etc
   markets = client.public.get_markets().data
@@ -52,7 +52,7 @@ def open_positions(client):
     # Get ZScore
     if len(series_1) > 0 and len(series_1) == len(series_2):
       spread = series_1 - (hedge_ratio * series_2)
-      z_score = calculate_zscore(spread).values.tolist()[-1]
+      z_score = calculate_zscore(spread).values.tolist()[-1] #get latest zscore with [-1]
 
       # Establish if potential trade
       if abs(z_score) >= ZSCORE_THRESH:

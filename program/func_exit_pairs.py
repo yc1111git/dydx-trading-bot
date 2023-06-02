@@ -75,10 +75,12 @@ def manage_trade_exits(client):
     order_size_m2 = order_m2.data["order"]["size"]
     order_side_m2 = order_m2.data["order"]["side"]
 
-    # Perform matching checks
+    # Perform matching checks - compare what we have record on Json file matches on DYDX
     check_m1 = position_market_m1 == order_market_m1 and position_size_m1 == order_size_m1 and position_side_m1 == order_side_m1
     check_m2 = position_market_m2 == order_market_m2 and position_size_m2 == order_size_m2 and position_side_m2 == order_side_m2
     check_live = position_market_m1 in markets_live and position_market_m2 in markets_live
+
+    # Position_market_m1 is on Json file, while order_market_m1 is returned by DyDx
 
     # Guard: If not all match exit with error
     if not check_m1 or not check_m2 or not check_live:
@@ -97,19 +99,19 @@ def manage_trade_exits(client):
     # Protect API
     time.sleep(0.2)
 
-    # Trigger close based on Z-Score
+    # Trigger close based on Z-Score - Video 'Manage Exits - Part 2'
     if CLOSE_AT_ZSCORE_CROSS:
 
       # Initialize z_scores
       hedge_ratio = position["hedge_ratio"]
-      z_score_traded = position["z_score"]
-      if len(series_1) > 0 and len(series_1) == len(series_2):
+      z_score_traded = position["z_score"] # z-score taken from json file, so it maybe old
+      if len(series_1) > 0 and len(series_1) == len(series_2): # check AGAIN even though we checked before, this is to make sure there is no error
         spread = series_1 - (hedge_ratio * series_2)
-        z_score_current = calculate_zscore(spread).values.tolist()[-1]
+        z_score_current = calculate_zscore(spread).values.tolist()[-1] # z score current to get the latest z-score
 
       # Determine trigger
-      z_score_level_check = abs(z_score_current) >= abs(z_score_traded)
-      z_score_cross_check = (z_score_current < 0 and z_score_traded > 0) or (z_score_current > 0 and z_score_traded < 0)
+      z_score_level_check = abs(z_score_current) >= abs(z_score_traded)  # same z-score level or above
+      z_score_cross_check = (z_score_current < 0 and z_score_traded > 0) or (z_score_current > 0 and z_score_traded < 0) # from positive crossing to negative, or crossing from negative to positive
 
       # Close trade
       if z_score_level_check and z_score_cross_check:
@@ -123,9 +125,9 @@ def manage_trade_exits(client):
     ###
 
     # Close positions if triggered
-    if is_close:
+    if is_close: # change to 'if not is_close' if want to close the pair immediately in the next cycle for development purpose
 
-      # Determine side - m1
+      # Determine side - m1 -> If it is a sell signal in the beginning, we are going to turn around to Buy in order to close it
       side_m1 = "SELL"
       if position_side_m1 == "SELL":
         side_m1 = "BUY"
@@ -158,7 +160,7 @@ def manage_trade_exits(client):
           side=side_m1,
           size=position_size_m1,
           price=accept_price_m1,
-          reduce_only=True,
+          reduce_only=True, # True since we are closing a position here
         )
 
         print(close_order_m1["order"]["id"])

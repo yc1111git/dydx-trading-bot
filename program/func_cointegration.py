@@ -32,8 +32,8 @@ def calculate_zscore(spread):
 
 # Calculate Cointegration
 def calculate_cointegration(series_1, series_2):
-  series_1 = np.array(series_1).astype(np.float)
-  series_2 = np.array(series_2).astype(np.float)
+  series_1 = np.array(series_1).astype(np.float64)
+  series_2 = np.array(series_2).astype(np.float64)
   coint_flag = 0
   coint_res = coint(series_1, series_2)
   coint_t = coint_res[0]
@@ -78,7 +78,7 @@ def store_cointegration_results(df_market_prices):
 
   # Create and save DataFrame
   df_criteria_met = pd.DataFrame(criteria_met_pairs)
-  df_criteria_met.to_csv("cointegrated_pairs.csv")
+  df_criteria_met.to_csv("cointegrated_pairs1.csv")
   del df_criteria_met
 
   # Return result

@@ -32,7 +32,7 @@ def get_candles_recent(client, market):
 
   # Construct and return close price series
   close_prices.reverse()
-  prices_result = np.array(close_prices).astype(np.float)
+  prices_result = np.array(close_prices).astype(np.float64)
   return prices_result
 
 
@@ -84,19 +84,19 @@ def construct_market_prices(client):
     if market_info["status"] == "ONLINE" and market_info["type"] == "PERPETUAL":
       tradeable_markets.append(market)
 
-  # Set initial DateFrame
+  # Set initial DateFrame - so just pull in the first one, it doesn't matter which market it is
   close_prices = get_candles_historical(client, tradeable_markets[0])
   df = pd.DataFrame(close_prices)
   df.set_index("datetime", inplace=True)
 
   # Append other prices to DataFrame
   # You can limit the amount to loop though here to save time in development
-  for market in tradeable_markets[1:]:
+  for market in tradeable_markets[1:20]: # start from second item of the arrary, hence [1:], can limit it by putting say [1:10] so you don't go through every single market
     close_prices_add = get_candles_historical(client, market)
     df_add = pd.DataFrame(close_prices_add)
     df_add.set_index("datetime", inplace=True)
-    df = pd.merge(df, df_add, how="outer", on="datetime", copy=False)
-    del df_add
+    df = pd.merge(df, df_add, how="outer", on="datetime", copy=False) # Outer join, join them together based on datetime
+    del df_add # detele the dataframe to save memory for safety
 
   # Check any columns with NaNs
   nans = df.columns[df.isna().any()].tolist()
