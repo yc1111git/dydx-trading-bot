@@ -8,7 +8,7 @@ MODE = "DEVELOPMENT" #PRODUCTION
 ABORT_ALL_POSITIONS = True
 
 # Find Cointegrated Pairs
-FIND_COINTEGRATED = False
+FIND_COINTEGRATED = True
 
 # Manage Exits
 MANAGE_EXITS = True
@@ -26,10 +26,13 @@ WINDOW = 21 #calculate rolling average for z-score
 MAX_HALF_LIFE = 24
 ZSCORE_THRESH = 1.5 #e.g. Long if zscore reach -1.5, and close if it goes back to 0, or 1.5 etc
 USD_PER_TRADE = 100
-USD_MIN_COLLATERAL = 1880
+USD_MIN_COLLATERAL = 100
 
 # Thresholds - Closing
 CLOSE_AT_ZSCORE_CROSS = True
+
+# TARGET_PAIRS - define number of markets to play in
+TARGET_PAIRS = 20
 
 # Ethereum Address
 ETHEREUM_ADDRESS = "0xa9219aB593Dbad072dBe6441959A59eF316b3DaE" # not private key.  copy from MetaMask

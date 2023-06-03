@@ -1,4 +1,5 @@
 from constants import RESOLUTION
+from constants import TARGET_PAIRS
 from func_utils import get_ISO_times
 import pandas as pd
 import numpy as np
@@ -89,9 +90,16 @@ def construct_market_prices(client):
   df = pd.DataFrame(close_prices)
   df.set_index("datetime", inplace=True)
 
+  '''
+  df looks like the below:
+  datetime    BTCUSD
+  2023-06-01  28000
+  2023-07-01  29000
+  '''
+
   # Append other prices to DataFrame
   # You can limit the amount to loop though here to save time in development
-  for market in tradeable_markets[1:20]: # start from second item of the arrary, hence [1:], can limit it by putting say [1:10] so you don't go through every single market
+  for market in tradeable_markets[1:TARGET_PAIRS]: # start from second item of the arrary, hence [1:], can limit it by putting say [1:10] so you don't go through every single market
     close_prices_add = get_candles_historical(client, market)
     df_add = pd.DataFrame(close_prices_add)
     df_add.set_index("datetime", inplace=True)

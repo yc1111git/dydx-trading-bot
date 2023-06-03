@@ -52,7 +52,7 @@ def calculate_cointegration(series_1, series_2):
 def store_cointegration_results(df_market_prices):
 
   # Initialize
-  markets = df_market_prices.columns.to_list()
+  markets = df_market_prices.columns.to_list() # it should return an arrary of the column names - [BTCUSD, ETHUSD, ATOMUSD]
   criteria_met_pairs = []
 
   # Find cointegrated pairs

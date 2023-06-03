@@ -41,17 +41,17 @@ if __name__ == "__main__":
   # Find Cointegrated Pairs
   if FIND_COINTEGRATED:
 
-    # Construct Market Prices
+    # Construct Market Prices - it stores all tradable markets into a dataframe
     try:
       print("Fetching market prices, please allow 3 mins...")
       df_market_prices = construct_market_prices(client)
-      print(df_market_prices) # delete me - just to see how the dataframe looks like
+      # print(df_market_prices) # delete me - just to see how the dataframe looks like
     except Exception as e:
       print("Error constructing market prices: ", e)
       send_message(f"Error constructing market prices {e}")
       exit(1)
 
-    # Store Cointegrated Pairs
+    # Store Cointegrated Pairs - it takes all the tradable markets in dataframe, loop through all and come up with tradable pairs, and store all these pairs into a .csv file
     try:
       print("Storing cointegrated pairs...")
       stores_result = store_cointegration_results(df_market_prices)
